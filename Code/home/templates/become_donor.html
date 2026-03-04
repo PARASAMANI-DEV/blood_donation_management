@@ -90,6 +90,7 @@
         text-transform: uppercase;
     }
 
+    /* Two-column responsive field grid */
     .fields-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -245,7 +246,8 @@
     .login-link a:hover { text-decoration: underline; }
 
     @media (max-width: 640px) {
-        .fields-grid { grid-template-columns: 1fr; }
+        /* Two-column responsive field grid */
+    .fields-grid { grid-template-columns: 1fr; }
         .form-card { padding: 30px 20px; }
         .register-header h2 { font-size: 1.7rem; }
     }
