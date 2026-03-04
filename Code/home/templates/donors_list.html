@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% block title %}Donors List{% endblock %}
+
+{% block css %}
+<style>
+    .donors-page {
+        padding: 50px 15px;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .page-header .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255,255,255,0.4);
+        font-size: 0.85rem;
+        text-decoration: none;
+        margin-bottom: 20px;
+        transition: color 0.2s;
+    }
+
+    .page-header .back-link:hover { color: #FF6B6B; }
+
+    .page-header h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .page-header p { color: rgba(255,255,255,0.4); font-size: 0.9rem; }
+
+    .donors-table-wrap {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 20px;
+        overflow: hidden;
+        max-width: 900px;
+        margin: 0 auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.6s ease-out;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(25px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .donor-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .donor-table thead tr {
+        background: rgba(142, 14, 0, 0.2);
+    }
+
+    .donor-table th {
+        padding: 16px 20px;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .donor-table td {
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.75);
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        vertical-align: middle;
+    }
+
+    .donor-table tbody tr {
+        transition: background 0.2s;
+    }
+
+    .donor-table tbody tr:hover {
+        background: rgba(255,255,255,0.04);
+    }
+
+    .donor-table tbody tr:last-child td { border-bottom: none; }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .status-available {
+        background: rgba(34, 197, 94, 0.12);
+        border: 1px solid rgba(34, 197, 94, 0.25);
+        color: #4ADE80;
+    }
+
+    .status-unavailable {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #F87171;
+    }
+
+    .status-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .blood-chip {
+        background: rgba(192, 20, 0, 0.15);
+        border: 1px solid rgba(192, 20, 0, 0.3);
+        color: #FF8080;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .view-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.65);
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .view-btn:hover {
+        background: rgba(192, 20, 0, 0.15);
+        border-color: rgba(192, 20, 0, 0.4);
+        color: #FF8080;
+        text-decoration: none;
+    }
+
+    .no-donors-card {
+        text-align: center;
+        padding: 80px 20px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .no-donors-card .icon { font-size: 3.5rem; color: rgba(192,20,0,0.3); margin-bottom: 20px; display: block; }
+    .no-donors-card h3 { color: rgba(255,255,255,0.6); font-size: 1.2rem; margin-bottom: 10px; }
+    .no-donors-card p { color: rgba(255,255,255,0.3); font-size: 0.9rem; margin-bottom: 25px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="donors-page">
+    <div class="container" style="max-width: 960px; margin: 0 auto;">
+        <div class="page-header">
+            <a href="/home/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blood Groups</a>
+            <h2>Available Donors</h2>
+            <p>Donors registered for this blood group</p>
+        </div>
+
+        {% if donor %}
+        <div class="donors-table-wrap">
+            <table class="donor-table">
+                <thead>
+                    <tr>
+                        <th>Donor Name</th>
+                        <th>Blood Group</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Profile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in donor %}
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <div style="width:36px;height:36px;border-radius:50%;background:rgba(192,20,0,0.2);border:1px solid rgba(192,20,0,0.3);display:flex;align-items:center;justify-content:center;color:#FF8080;font-size:0.85rem;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span style="font-weight:600;color:white;">{{i.donor.get_full_name}}</span>
+                            </div>
+                        </td>
+                        <td><span class="blood-chip">{{i.blood_group}}</span></td>
+                        <td><i class="fas fa-map-marker-alt" style="color:rgba(192,20,0,0.6);margin-right:6px;"></i>{{i.state}}, {{i.city}}</td>
+                        <td>
+                            {% if i.ready_to_donate %}
+                            <span class="status-pill status-available">
+                                <div class="status-dot"></div>Ready
+                            </span>
+                            {% else %}
+                            <span class="status-pill status-unavailable">
+                                <div class="status-dot"></div>Unavailable
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if i.ready_to_donate %}
+                            <a href="/donors_details/{{i.id}}/" class="view-btn">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            {% else %}
+                            <span style="color:rgba(255,255,255,0.2);font-size:0.82rem;">–</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="no-donors-card">
+            <i class="fas fa-heart-crack icon"></i>
+            <h3>No Donors Found</h3>
+            <p>There are no registered donors for this blood group yet.</p>
+            <a href="/become_donor/" class="btn-blood">
+                <i class="fas fa-user-plus mr-2"></i>Be the First Donor
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
