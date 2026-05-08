@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'wy#+(&hxnf5$hd=wx)0mffwknu5h+@=u7&e%e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') + ['.railway.app', '.up.railway.app']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') + ['.railway.app', '.up.railway.app', '.onrender.com', '*']
 
 
 # Application definition
